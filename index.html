@@ -16,6 +16,7 @@
         }
 
         .container {
+            position: relative; /* Needed for absolute positioning of lang switcher */
             width: 100%;
             max-width: 1200px;
             background-color: #ffffff;
@@ -29,6 +30,30 @@
             padding: 30px 20px 10px 20px;
             text-align: center;
             margin: 0;
+        }
+
+        /* --- Language Switcher --- */
+        #lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .lang-btn {
+            background-color: transparent;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .lang-btn.active {
+            background-color: #c84114;
+            color: white;
+            border-color: #c84114;
         }
 
         /* --- Album Filter Styling --- */
@@ -117,22 +142,29 @@
             position: relative;
             margin-left: 8px;
             cursor: pointer;
+            vertical-align: middle;
         }
 
         .info-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 18px;
-            height: 18px;
+            width: 16px;      /* Smaller */
+            height: 16px;     /* Smaller */
             background-color: #c84114;
             color: white;
             border-radius: 50%;
             font-style: normal;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;    /* Smaller */
             user-select: none;
-            line-height: 18px;
+            line-height: 16px;
+            opacity: 0.6;     /* Less visible */
+            transition: opacity 0.2s;
+        }
+
+        .tooltip-container:hover .info-icon {
+            opacity: 1; /* Fully visible on hover */
         }
 
         .tooltip-text {
@@ -147,7 +179,7 @@
             z-index: 1;
             bottom: 125%; 
             left: 50%;
-            margin-left: -125px; /* Use half of the width to center */
+            margin-left: -125px;
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 0.9em;
@@ -171,19 +203,16 @@
             opacity: 1;
         }
 
-        /* For non-Ed Sheeran songs */
-        .artist-credit {
-            display: block;
-            font-size: 0.8em;
-            color: #777;
-            font-style: italic;
-        }
-
-
         /* --- Media Queries --- */
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.8em;
+                padding-right: 60px; /* Make space for lang switcher */
+                padding-left: 60px;
+            }
+            #lang-switcher {
+                top: 10px;
+                right: 10px;
             }
             #songs-table th, #songs-table td {
                 padding: 8px 10px;
@@ -203,6 +232,11 @@
 <body>
 
     <div class="container">
+        <div id="lang-switcher">
+            <button id="lang-en" class="lang-btn active">EN</button>
+            <button id="lang-ru" class="lang-btn">RU</button>
+        </div>
+        
         <h1 id="main-title">Loading...</h1>
         
         <div id="album-filter-container">
@@ -231,211 +265,99 @@
               "title": "Ed Sheeran Emotional Toolkit",
               "categories": [
                 {
-                  "id": 1,
-                  "emotion": "Happiness",
-                  "description": "Pure, energetic joy",
+                  "emotion": "Happiness", "description": "Pure, energetic joy",
                   "songs": [
-                    {"title": "Celestial", "album": "-"},
-                    {"title": "2step", "album": "="},
-                    {"title": "Shivers", "album": "="},
-                    {"title": "Tides", "album": "="},
-                    {"title": "Overpass Graffiti", "album": "="},
-                    {"title": "Be Right Now", "album": "="}
+                    {"title": "Celestial", "album": "-"}, {"title": "2step", "album": "="}, {"title": "Shivers", "album": "="}, {"title": "Tides", "album": "="}, {"title": "Overpass Graffiti", "album": "="}, {"title": "Be Right Now", "album": "="}
                   ]
                 },
                 {
-                  "id": 2,
-                  "emotion": "Sadness",
-                  "description": "Deep grief, quiet heartbreak",
+                  "emotion": "Sadness", "description": "Deep grief, quiet heartbreak",
                   "songs": [
-                    {"title": "Afire Love", "album": "×"},
-                    {"title": "All Of The Stars", "album": "×"},
-                    {"title": "Happier", "album": "÷"},
-                    {"title": "Supermarket Flowers", "album": "÷"},
-                    {"title": "Visiting Hours", "album": "="},
-                    {"title": "Boat", "album": "="},
-                    {"title": "Spark", "album": "="},
-                    {"title": "Colourblind", "album": "-"},
-                    {"title": "Borderline", "album": "-"}
+                    {"title": "Afire Love", "album": "×"}, {"title": "All Of The Stars", "album": "×"}, {"title": "Happier", "album": "÷"}, {"title": "Supermarket Flowers", "album": "÷"}, {"title": "Visiting Hours", "album": "="}, {"title": "Boat", "album": "="}, {"title": "Spark", "album": "="}, {"title": "Colourblind", "album": "-"}, {"title": "Borderline", "album": "-"}
                   ]
                 },
                 {
-                  "id": 3,
-                  "emotion": "Anger / Defiance",
-                  "description": "Fighting back, proving them wrong",
+                  "emotion": "Anger / Defiance", "description": "Fighting back, proving them wrong",
                   "songs": [
-                    {"title": "Bloodstream", "album": "×"},
-                    {"title": "You Need Me, I Don't Need You", "album": "+"},
-                    {"title": "Eraser", "album": "÷"},
-                    {"title": "Take Me Back To London", "album": "Single"},
-                    {"title": "Don't", "album": "×"},
-                    {"title": "A Little More", "album": "♡"}
+                    {"title": "Bloodstream", "album": "×"}, {"title": "You Need Me, I Don't Need You", "album": "+"}, {"title": "Eraser", "album": "÷"}, {"title": "Take Me Back To London", "album": "Single"}, {"title": "Don't", "album": "×"}, {"title": "A Little More", "album": "♡"}
                   ]
                 },
                 {
-                  "id": 4,
-                  "emotion": "Perfect Love",
-                  "description": "The feeling of safety, romance, and home",
+                  "emotion": "Perfect Love", "description": "The feeling of safety, romance, and home",
                   "songs": [
-                    {"title": "Perfect", "album": "÷"},
-                    {"title": "Kiss Me", "album": "+"},
-                    {"title": "Tenerife Sea", "album": "×"},
-                    {"title": "Hearts Don't Break Around Here", "album": "÷"},
-                    {"title": "First Times", "album": "="},
-                    {"title": "The Joker And The Queen", "album": "="},
-                    {"title": "Best Part Of Me", "album": "No.6"},
-                    {"title": "Home", "artist": "Myles Smith", "album": "Single"},
-                    {"title": "the end of the world (cover)", "artist": "Billie Eilish", "album": "Single"},
+                    {"title": "Perfect", "album": "÷"}, {"title": "Kiss Me", "album": "+"}, {"title": "Tenerife Sea", "album": "×"}, {"title": "Hearts Don't Break Around Here", "album": "÷"}, {"title": "First Times", "album": "="}, {"title": "The Joker And The Queen", "album": "="}, {"title": "Best Part Of Me", "album": "No.6"}
                   ]
                 },
                 {
-                  "id": 5,
-                  "emotion": "Missing Someone / Longing",
-                  "description": "The active ache of distance",
+                  "emotion": "Missing Someone / Longing", "description": "The active ache of distance",
                   "songs": [
-                    {"title": "Photograph", "album": "×"},
-                    {"title": "All Of The Stars", "album": "×"},
-                    {"title": "Afterglow", "album": "Single"},
-                    {"title": "Cold Coffee", "album": "Loose Change"}
+                    {"title": "Photograph", "album": "×"}, {"title": "All Of The Stars", "album": "×"}, {"title": "Afterglow", "album": "Single"}, {"title": "Cold Coffee", "album": "Loose Change"}
                   ]
                 },
                 {
-                  "id": 6,
-                  "emotion": "Plea / Vulnerability",
-                  "description": "A raw, desperate need for connection",
+                  "emotion": "Plea / Vulnerability", "description": "A raw, desperate need for connection",
                   "songs": [
-                    {"title": "Give Me Love", "album": "+"},
-                    {"title": "Kiss Me", "album": "+"},
-                    {"title": "One Life", "album": "="},
-                    {"title": "This", "album": "+"},
-                    {"title": "Drunk", "album": "+"},
-                    {"title": "No Matter What", "artist": "Calum Scott", "album": "Single"}
+                    {"title": "Give Me Love", "album": "+"}, {"title": "Kiss Me", "album": "+"}, {"title": "One Life", "album": "="}, {"title": "This", "album": "+"}, {"title": "Drunk", "album": "+"}
                   ]
                 },
                 {
-                  "id": 7,
-                  "emotion": "Jump / Freedom",
-                  "description": "Explosive, youthful, running-through-a-field energy",
+                  "emotion": "Jump / Freedom", "description": "Explosive, youthful, running-through-a-field energy",
                   "songs": [
-                    {"title": "Castle On The Hill", "album": "÷"},
-                    {"title": "Bad Habits", "album": "-"},
-                    {"title": "Stop The Rain", "album": "-"},
-                    {"title": "Celestial", "album": "-"},
-                    {"title": "Curtains", "album": "="},
-                    {"title": "Azizam", "album": "♡"},
-                    {"title": "I Don't Care", "album": "No.6"}
+                    {"title": "Castle On The Hill", "album": "÷"}, {"title": "Bad Habits", "album": "-"}, {"title": "Stop The Rain", "album": "-"}, {"title": "Celestial", "album": "-"}, {"title": "Curtains", "album": "="}, {"title": "Azizam", "album": "♡"}, {"title": "I Don't Care", "album": "No.6"}
                   ]
                 },
                 {
-                  "id": 8,
-                  "emotion": "Rap / Skill",
-                  "description": "Admiring the craft and lyrical flow",
+                  "emotion": "Rap / Skill", "description": "Admiring the craft and lyrical flow",
                   "songs": [
-                    {"title": "U.N.I.", "album": "+"},
-                    {"title": "You Need Me, I Don't Need You", "album": "+"},
-                    {"title": "Don't", "album": "×"},
-                    {"title": "Sing", "album": "×"},
-                    {"title": "Nina", "album": "×"},
-                    {"title": "Runaway", "album": "×"},
-                    {"title": "2step", "album": "="},
-                    {"title": "End Of Youth", "album": "-"},
-                    {"title": "F64", "album": "Single"},
-                    {"title": "Eraser", "album": "÷"},
-                    {"title": "River", "album": "No.6"},
-                    {"title": "Take Me Back To London", "album": "Single"}
+                    {"title": "U.N.I.", "album": "+"}, {"title": "You Need Me, I Don't Need You", "album": "+"}, {"title": "Don't", "album": "×"}, {"title": "Sing", "album": "×"}, {"title": "Nina", "album": "×"}, {"title": "Runaway", "album": "×"}, {"title": "2step", "album": "="}, {"title": "End Of Youth", "album": "-"}, {"title": "F64", "album": "Single"}, {"title": "Eraser", "album": "÷"}, {"title": "River", "album": "No.6"}, {"title": "Take Me Back To London", "album": "Single"}
                   ]
                 },
                 {
-                  "id": 9,
-                  "emotion": "Calm / Peace",
-                  "description": "Quiet, gentle, comforting moments",
+                  "emotion": "Calm / Peace", "description": "Quiet, gentle, comforting moments",
                   "songs": [
-                    {"title": "One Life", "album": "="},
-                    {"title": "Dusty", "album": "-"},
-                    {"title": "The A Team", "album": "+"},
-                    {"title": "Lego House", "album": "+"},
-                    {"title": "Visiting Hours", "album": "="},
-                    {"title": "Love In Slow Motion", "album": "="},
-                    {"title": "One", "album": "No.6"},
-                    {"title": "Tenerife Sea", "album": "×"}
+                    {"title": "One Life", "album": "="}, {"title": "Dusty", "album": "-"}, {"title": "The A Team", "album": "+"}, {"title": "Lego House", "album": "+"}, {"title": "Visiting Hours", "album": "="}, {"title": "Love In Slow Motion", "album": "="}, {"title": "One", "album": "No.6"}, {"title": "Tenerife Sea", "album": "×"}
                   ]
                 },
                 {
-                  "id": 10,
-                  "emotion": "Crazy Happy / Party Vibe",
-                  "description": "Singing along with the whole pub",
+                  "emotion": "Crazy Happy / Party Vibe", "description": "Singing along with the whole pub",
                   "songs": [
-                    {"title": "Bibia Be Ye Ye", "album": "÷"},
-                    {"title": "Galway Girl", "album": "÷"},
-                    {"title": "Shape Of You", "album": "÷"},
-                    {"title": "Beautiful People", "album": "No.6"},
-                    {"title": "Peru", "album": "Single"},
-                    {"title": "Lay It All On Me", "album": "Single"}
+                    {"title": "Bibia Be Ye Ye", "album": "÷"}, {"title": "Galway Girl", "album": "÷"}, {"title": "Shape Of You", "album": "÷"}, {"title": "Beautiful People", "album": "No.6"}, {"title": "Peru", "album": "Single"}, {"title": "Lay It All On Me", "album": "Single"}
                   ]
                 },
                 {
-                  "id": 11,
-                  "emotion": "New Year / Holiday",
-                  "description": "Festive, seasonal feelings",
+                  "emotion": "New Year / Holiday", "description": "Festive, seasonal feelings",
                   "songs": [
-                    {"title": "Under The Tree", "album": "Single"},
-                    {"title": "Merry Christmas", "album": "Single"}
+                    {"title": "Under The Tree", "album": "Single"}, {"title": "Merry Christmas", "album": "Single"}
                   ]
                 },
                 {
-                  "id": 12,
-                  "emotion": "Nostalgia / Looking Back",
-                  "description": "Bittersweet memories of growing up",
+                  "emotion": "Nostalgia / Looking Back", "description": "Bittersweet memories of growing up",
                   "songs": [
-                    {"title": "Castle On The Hill", "album": "÷"},
-                    {"title": "Eraser", "album": "÷"},
-                    {"title": "First Times", "album": "="},
-                    {"title": "U.N.I.", "album": "+"},
-                    {"title": "Drunk", "album": "+"}
+                    {"title": "Castle On The Hill", "album": "÷"}, {"title": "Eraser", "album": "÷"}, {"title": "First Times", "album": "="}, {"title": "U.N.I.", "album": "+"}, {"title": "Drunk", "album": "+"}
                   ]
                 },
                 {
-                  "id": 13,
-                  "emotion": "Protection / Shelter",
-                  "description": "The feeling of protecting someone you love",
+                  "emotion": "Protection / Shelter", "description": "The feeling of protecting someone you love",
                   "songs": [
-                    {"title": "Little Bird", "album": "Loose Change"},
-                    {"title": "Small Bump", "album": "+"},
-                    {"title": "The Joker And The Queen", "album": "="},
-                    {"title": "Best Part Of Me", "album": "No.6"}
+                    {"title": "Little Bird", "album": "Loose Change"}, {"title": "Small Bump", "album": "+"}, {"title": "The Joker And The Queen", "album": "="}, {"title": "Best Part Of Me", "album": "No.6"}
                   ]
                 },
                 {
-                  "id": 14,
-                  "emotion": "Dark & Moody / Vibe",
-                  "description": "Intense, atmospheric, late-night feelings",
+                  "emotion": "Dark & Moody / Vibe", "description": "Intense, atmospheric, late-night feelings",
                   "songs": [
-                    {"title": "I See Fire", "album": "Hobbit"},
-                    {"title": "River", "album": "No.6"},
-                    {"title": "Bloodstream", "album": "×"},
-                    {"title": "Eyes Closed", "album": "-"},
-                    {"title": "Stoned", "album": "="},
-                    {"title": "Borderline", "album": "-"}
+                    {"title": "I See Fire", "album": "Hobbit"}, {"title": "River", "album": "No.6"}, {"title": "Bloodstream", "album": "×"}, {"title": "Eyes Closed", "album": "-"}, {"title": "Stoned", "album": "="}, {"title": "Borderline", "album": "-"}
                   ]
                 },
                 {
-                  "id": 15,
-                  "emotion": "No Strings / Moving On",
-                  "description": "The feeling of letting go, being okay alone",
+                  "emotion": "No Strings / Moving On", "description": "The feeling of letting go, being okay alone",
                   "songs": [
-                    {"title": "No Strings", "album": "-"},
-                    {"title": "Happier", "album": "÷"},
-                    {"title": "Overpass Graffiti", "album": "="}
+                    {"title": "No Strings", "album": "-"}, {"title": "Happier", "album": "÷"}, {"title": "Overpass Graffiti", "album": "="}
                   ]
                 },
                 {
-                  "id": 16,
-                  "emotion": "Ending Vibe",
-                  "description": "The epic, cathartic, bittersweet feeling of the concert finale",
+                  "emotion": "Ending Vibe", "description": "The epic, cathartic, bittersweet feeling of the concert finale",
                   "songs": [
-                    {"title": "Bloodstream", "album": "×"},
-                    {"title": "Shape of You (Live)", "album": "÷"},
-                    {"title": "Bad Habits", "album": "-"}
+                    {"title": "Bloodstream", "album": "×"}, {"title": "Shape of You (Live)", "album": "÷"}, {"title": "Bad Habits", "album": "-"}
                   ]
                 }
               ]
@@ -448,15 +370,12 @@
                 "One Life": "This is my anthem of bravery. It's the song about making a change in your life and the dream of finally living one, whole, honest life.",
                 "Give Me Love": "A song of pure, desperate longing. For me, it's about the deep, overwhelming need to just be close to the people I love.",
                 "Kiss Me": "This is the blueprint for my reunion with Kirill. It's not just a song; it's a to-do list for a perfect, intimate moment.",
-                "No Matter What": "This is my prayer for the conversation with my mom. It's the hopeful future where I am loved and accepted for exactly who I am.",
-                "the end of the world (cover)": "A song of ultimate trust. I made my own cover of this for my one-month anniversary with Kirill to show him how much I trust him.",
                 "You Need Me, I Don't Need You": "This is the song that proves his genius. For me, it's also about a declaration of independence and self-worth.",
                 "Bloodstream": "The feeling of the fire on my face in the front row. It's the soundtrack to pure, chaotic, beautiful energy.",
                 "Afterglow": "For me, this word means the beautiful, sad, nostalgic glow that a person leaves on your soul, even when they're gone.",
                 "The A Team": "The first song that truly showed me the depth of his songwriting. The sound of birds in the music video is a core memory for me.",
                 "Small Bump": "This chorus holds one of the most comforting lines ever written. For me, it's about the simple, safe feeling of holding Kirill's hand.",
                 "Castle On The Hill": "The feeling of pure, explosive freedom. Of being young and just running.",
-                "Home": "After hearing this live, it became the song about finding a home not in a place, but in a person. For me, home is Kirill and Nikita.",
                 "A Little More": "This is my secret anthem of revenge. It's the song I will use to take back my power from the heartbreak Lisa caused."
             };
 
@@ -473,63 +392,87 @@
                 "Single": "https://i.imgur.com/gK5yU1m.png" // Generic single icon
             };
             
+            // --- TRANSLATION DATA ---
+            const translations = {
+                ru: {
+                    title: "Эмоциональный гид по песням Эда Ширана",
+                    allAlbums: "Все альбомы",
+                    categories: {
+                        "Happiness": "Счастье", "Sadness": "Грусть", "Anger / Defiance": "Злость / Неповиновение", "Perfect Love": "Идеальная любовь", "Missing Someone / Longing": "Тоска / Ожидание", "Plea / Vulnerability": "Мольба / Уязвимость", "Jump / Freedom": "Прыжок / Свобода", "Rap / Skill": "Рэп / Мастерство", "Calm / Peace": "Спокойствие / Умиротворение", "Crazy Happy / Party Vibe": "Безумное веселье / Вечеринка", "New Year / Holiday": "Новый год / Праздники", "Nostalgia / Looking Back": "Ностальгия / Взгляд в прошлое", "Protection / Shelter": "Защита / Укрытие", "Dark & Moody / Vibe": "Мрачность / Атмосфера", "No Strings / Moving On": "Без обязательств / Двигаться дальше", "Ending Vibe": "Финал / Катарсис"
+                    },
+                    descriptions: {
+                        "Pure, energetic joy": "Чистая, энергичная радость", "Deep grief, quiet heartbreak": "Глубокая скорбь, тихая боль", "Fighting back, proving them wrong": "Давать отпор, доказывать их неправоту", "The feeling of safety, romance, and home": "Ощущение безопасности, романтики и дома", "The active ache of distance": "Острая боль разлуки", "A raw, desperate need for connection": "Неприкрытая, отчаянная нужда в близости", "Explosive, youthful, running-through-a-field energy": "Взрывная, юношеская энергия бега по полю", "Admiring the craft and lyrical flow": "Восхищение мастерством и лирическим потоком", "Quiet, gentle, comforting moments": "Тихие, нежные, утешающие моменты", "Singing along with the whole pub": "Петь хором со всем пабом", "Festive, seasonal feelings": "Праздничные, сезонные чувства", "Bittersweet memories of growing up": "Горько-сладкие воспоминания о взрослении", "The feeling of protecting someone you love": "Чувство, когда защищаешь того, кого любишь", "Intense, atmospheric, late-night feelings": "Напряженные, атмосферные, ночные чувства", "The feeling of letting go, being okay alone": "Ощущение, когда отпускаешь и тебе хорошо одному", "The epic, cathartic, bittersweet feeling of the concert finale": "Эпичное, катарсическое, горько-сладкое чувство финала концерта"
+                    },
+                    notes: {
+                        "Photograph": "Это песня моей любви на расстоянии. Это обещание поцелуя под фонарным столбом и чувство, будто хранишь любимого человека в кармане.",
+                        "Afire Love": "Эта песня была моим спутником в горе от потери бабушки. Это дань её памяти и отражение пути моего дедушки.",
+                        "All Of The Stars": "Песня, которая была настолько сильной, что заставила меня посмотреть мой первый романтический фильм, и которая идеально передает боль от тоски по Кириллу.",
+                        "One Life": "Это мой гимн храбрости. Это песня о том, как изменить свою жизнь, и мечта о том, чтобы наконец прожить одну, целую, честную жизнь.",
+                        "Give Me Love": "Песня чистого, отчаянного желания. Для меня она о глубокой, всепоглощающей потребности просто быть рядом с людьми, которых я люблю.",
+                        "Kiss Me": "Это план моего воссоединения с Кириллом. Это не просто песня; это список дел для идеального, интимного момента.",
+                        "You Need Me, I Don't Need You": "Эта песня доказывает его гениальность. Для меня она также о декларации независимости и самоуважения.",
+                        "Bloodstream": "Ощущение огня на лице в первом ряду. Это саундтрек к чистой, хаотичной, прекрасной энергии.",
+                        "Afterglow": "Для меня это слово означает красивое, грустное, ностальгическое сияние, которое человек оставляет в твоей душе, даже когда он уходит.",
+                        "The A Team": "Первая песня, которая по-настоящему показала мне глубину его таланта. Звук птиц в клипе — одно из моих ключевых воспоминаний.",
+                        "Small Bump": "В этом припеве одна из самых утешительных строчек, когда-либо написанных. Для меня она о простом, безопасном чувстве, когда держишь Кирилла за руку.",
+                        "Castle On The Hill": "Ощущение чистой, взрывной свободы. Ощущение юности и просто бега.",
+                        "A Little More": "Это мой секретный гимн мести. Песня, с помощью которой я верну себе силу после той боли, что причинила Лиза."
+                    }
+                }
+            };
+            
+            // --- APP STATE ---
+            let currentLanguage = 'en';
+            let currentFilter = 'all';
 
-            function populateTable(albumFilter = 'all') {
+            // --- FUNCTIONS ---
+            function getTranslation(key, subkey) {
+                if (currentLanguage === 'en' || !translations.ru[key] || !translations.ru[key][subkey]) {
+                    // Fallback to original English text if translation doesn't exist
+                    if (key === 'categories') return subkey;
+                    if (key === 'descriptions') return subkey;
+                    if (key === 'notes') return songNotes[subkey] || '';
+                    return '';
+                }
+                return translations.ru[key][subkey];
+            }
+
+            function populateTable() {
                 const tableBody = document.getElementById('table-body');
                 tableBody.innerHTML = '';
 
-                // Create a filtered version of the data based on the selected album
                 const filteredCategories = songData.categories.map(category => {
-                    const filteredSongs = category.songs.filter(song => 
-                        albumFilter === 'all' || song.album === albumFilter
-                    );
-                    // Return a new category object with only the filtered songs
+                    const filteredSongs = category.songs.filter(song => currentFilter === 'all' || song.album === currentFilter);
                     return { ...category, songs: filteredSongs };
-                }).filter(category => category.songs.length > 0); // Exclude categories with no matching songs
-
+                }).filter(category => category.songs.length > 0);
 
                 filteredCategories.forEach(category => {
                     const songs = category.songs;
-                    
                     songs.forEach((song, index) => {
                         const row = document.createElement('tr');
-
-                        // Add the emotion cell only for the first song in the category
                         if (index === 0) {
                             const emotionCell = document.createElement('td');
                             emotionCell.rowSpan = songs.length;
-                            emotionCell.innerHTML = `${category.emotion}<br><small>${category.description}</small>`;
+                            const translatedEmotion = getTranslation('categories', category.emotion);
+                            const translatedDescription = getTranslation('descriptions', category.description);
+                            emotionCell.innerHTML = `${translatedEmotion}<br><small>${translatedDescription}</small>`;
                             emotionCell.classList.add('emotion-cell');
                             row.appendChild(emotionCell);
                         }
                         
-                        // --- Song Title Cell with Tooltip ---
                         const titleCell = document.createElement('td');
                         titleCell.classList.add('song-title-cell');
-                        
                         let titleHTML = song.title;
-                        if (song.artist) {
-                             titleHTML += `<span class="artist-credit">by ${song.artist}</span>`;
-                        }
-
-                        if (songNotes[song.title]) {
-                            titleHTML += `
-                                <span class="tooltip-container" tabindex="0">
-                                    <i class="info-icon">?</i>
-                                    <span class="tooltip-text">${songNotes[song.title]}</span>
-                                </span>`;
+                        const noteText = getTranslation('notes', song.title);
+                        if (noteText) {
+                            titleHTML += `<span class="tooltip-container" tabindex="0"><i class="info-icon">?</i><span class="tooltip-text">${noteText}</span></span>`;
                         }
                         titleCell.innerHTML = titleHTML;
                         row.appendChild(titleCell);
 
-                        // --- Album Cell with Image Tooltip ---
                         const albumCell = document.createElement('td');
                         albumCell.classList.add('album-cell');
-                        if (albumArtMap[song.album]) {
-                            albumCell.innerHTML = `<img src="${albumArtMap[song.album]}" alt="Album art for ${song.album}" title="${song.album}">`;
-                        } else {
-                            albumCell.textContent = song.album;
-                        }
+                        albumCell.innerHTML = albumArtMap[song.album] ? `<img src="${albumArtMap[song.album]}" alt="Album art for ${song.album}" title="${song.album}">` : song.album;
                         row.appendChild(albumCell);
 
                         tableBody.appendChild(row);
@@ -539,19 +482,15 @@
             
             function createFilterControls() {
                 const filterContainer = document.getElementById('album-filter-container');
-                
-                // Get all unique album names
                 const allAlbums = songData.categories.flatMap(cat => cat.songs.map(song => song.album));
                 const uniqueAlbums = [...new Set(allAlbums)].sort();
 
-                // Create "All" button
                 const allButton = document.createElement('button');
-                allButton.textContent = 'All Albums';
+                allButton.textContent = currentLanguage === 'ru' ? translations.ru.allAlbums : 'All Albums';
                 allButton.classList.add('filter-btn', 'active');
                 allButton.dataset.album = 'all';
                 filterContainer.appendChild(allButton);
 
-                // Create buttons for each unique album
                 uniqueAlbums.forEach(album => {
                     const button = document.createElement('button');
                     button.textContent = album;
@@ -560,24 +499,40 @@
                     filterContainer.appendChild(button);
                 });
                 
-                // Add event listener to the container (event delegation)
                 filterContainer.addEventListener('click', function(event) {
                     if (event.target.tagName === 'BUTTON') {
-                        // Remove active class from all buttons
                         filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                        // Add active class to the clicked button
                         event.target.classList.add('active');
-                        // Repopulate the table with the selected filter
-                        const selectedAlbum = event.target.dataset.album;
-                        populateTable(selectedAlbum);
+                        currentFilter = event.target.dataset.album;
+                        populateTable();
                     }
                 });
+            }
+            
+            function switchLanguage(lang) {
+                if (lang === currentLanguage) return;
+                currentLanguage = lang;
+                
+                // Update active buttons
+                document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+                document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+
+                // Update static text
+                document.getElementById('main-title').textContent = (lang === 'ru') ? translations.ru.title : songData.title;
+                document.querySelector('.filter-btn[data-album="all"]').textContent = (lang === 'ru') ? translations.ru.allAlbums : 'All Albums';
+                
+                // Re-render the table with the new language and current filter
+                populateTable();
             }
 
             function init() {
                 document.getElementById('main-title').textContent = songData.title;
                 createFilterControls();
                 populateTable();
+
+                // Add language switcher event listeners
+                document.getElementById('lang-en').addEventListener('click', () => switchLanguage('en'));
+                document.getElementById('lang-ru').addEventListener('click', () => switchLanguage('ru'));
             }
             
             init();
