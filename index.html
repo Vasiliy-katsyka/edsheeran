@@ -9,27 +9,54 @@
         /* --- General Page Styling --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f0f0; /* A neutral background for the screenshot */
+            background-color: #f0f0f0;
             color: #333;
             margin: 0;
-            padding: 0; /* Remove padding from body */
+            padding: 0;
         }
 
-        /* The container now acts as the page content with a max-width */
         .container {
             width: 100%;
-            max-width: 1200px; /* Adjust as needed for desired width */
+            max-width: 1200px;
             background-color: #ffffff;
-            margin: 0 auto; /* Center the container on the page */
+            margin: 0 auto;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             color: #c84114; /* Ed Sheeran's brand orange */
             font-size: 2.5em;
-            padding: 30px 20px 20px 20px; /* Give title some space */
+            padding: 30px 20px 10px 20px;
             text-align: center;
             margin: 0;
+        }
+
+        /* --- Album Filter Styling --- */
+        #album-filter-container {
+            padding: 10px 20px 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .filter-btn:hover {
+            background-color: #e2e6ea;
+        }
+
+        .filter-btn.active {
+            background-color: #c84114;
+            color: #ffffff;
+            border-color: #c84114;
         }
 
         /* --- Table Styling --- */
@@ -49,14 +76,12 @@
             background-color: #343a40;
             color: #ffffff;
             font-weight: bold;
-            /* Sticky header is not needed for a static screenshot */
         }
         
         #songs-table tbody tr:nth-child(even) {
             background-color: #f8f9fa;
         }
 
-        /* --- Class selector for the emotion cell --- */
         #songs-table .emotion-cell {
             font-weight: bold;
             color: #c84114;
@@ -70,7 +95,6 @@
             margin-top: 4px;
         }
 
-        /* Album Art Styling */
         #songs-table .album-cell {
             text-align: center;
         }
@@ -82,8 +106,81 @@
             border-radius: 4px;
             vertical-align: middle;
         }
+        
+        /* --- Tooltip & Info Icon Styling --- */
+        .song-title-cell {
+            position: relative;
+        }
 
-        /* Media query for smaller screens to reduce padding */
+        .tooltip-container {
+            display: inline-block;
+            position: relative;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-color: #c84114;
+            color: white;
+            border-radius: 50%;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 12px;
+            user-select: none;
+            line-height: 18px;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; 
+            left: 50%;
+            margin-left: -125px; /* Use half of the width to center */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+        
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text,
+        .tooltip-container:focus .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* For non-Ed Sheeran songs */
+        .artist-credit {
+            display: block;
+            font-size: 0.8em;
+            color: #777;
+            font-style: italic;
+        }
+
+
+        /* --- Media Queries --- */
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.8em;
@@ -96,6 +193,10 @@
                 width: 35px;
                 height: 35px;
             }
+            .tooltip-text {
+                width: 200px;
+                margin-left: -100px;
+            }
         }
     </style>
 </head>
@@ -103,6 +204,11 @@
 
     <div class="container">
         <h1 id="main-title">Loading...</h1>
+        
+        <div id="album-filter-container">
+            <!-- Filter buttons will be generated here by JavaScript -->
+        </div>
+        
         <table id="songs-table">
             <thead>
                 <tr>
@@ -120,6 +226,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
+            // --- DATA ---
             const songData = {
               "title": "Ed Sheeran Emotional Toolkit",
               "categories": [
@@ -161,7 +268,8 @@
                     {"title": "You Need Me, I Don't Need You", "album": "+"},
                     {"title": "Eraser", "album": "÷"},
                     {"title": "Take Me Back To London", "album": "Single"},
-                    {"title": "Don't", "album": "×"}
+                    {"title": "Don't", "album": "×"},
+                    {"title": "A Little More", "album": "♡"}
                   ]
                 },
                 {
@@ -175,7 +283,9 @@
                     {"title": "Hearts Don't Break Around Here", "album": "÷"},
                     {"title": "First Times", "album": "="},
                     {"title": "The Joker And The Queen", "album": "="},
-                    {"title": "Best Part Of Me", "album": "No.6"}
+                    {"title": "Best Part Of Me", "album": "No.6"},
+                    {"title": "Home", "artist": "Myles Smith", "album": "Single"},
+                    {"title": "the end of the world (cover)", "artist": "Billie Eilish", "album": "Single"},
                   ]
                 },
                 {
@@ -198,7 +308,8 @@
                     {"title": "Kiss Me", "album": "+"},
                     {"title": "One Life", "album": "="},
                     {"title": "This", "album": "+"},
-                    {"title": "Drunk", "album": "+"}
+                    {"title": "Drunk", "album": "+"},
+                    {"title": "No Matter What", "artist": "Calum Scott", "album": "Single"}
                   ]
                 },
                 {
@@ -228,7 +339,6 @@
                     {"title": "Runaway", "album": "×"},
                     {"title": "2step", "album": "="},
                     {"title": "End Of Youth", "album": "-"},
-                    {"title": "A Little More", "album": "♡"},
                     {"title": "F64", "album": "Single"},
                     {"title": "Eraser", "album": "÷"},
                     {"title": "River", "album": "No.6"},
@@ -331,6 +441,25 @@
               ]
             };
             
+            const songNotes = {
+                "Photograph": "This is the song of my long-distance love. It's the promise of a kiss under a lamppost and the feeling of keeping someone you love safe in your pocket.",
+                "Afire Love": "This song was my companion through the grief of losing my grandma. It's a tribute to her memory and a reflection of my grandpa's journey.",
+                "All Of The Stars": "The song that was so powerful it made me watch my first romance movie, and a song that perfectly captures the ache of missing Kirill.",
+                "One Life": "This is my anthem of bravery. It's the song about making a change in your life and the dream of finally living one, whole, honest life.",
+                "Give Me Love": "A song of pure, desperate longing. For me, it's about the deep, overwhelming need to just be close to the people I love.",
+                "Kiss Me": "This is the blueprint for my reunion with Kirill. It's not just a song; it's a to-do list for a perfect, intimate moment.",
+                "No Matter What": "This is my prayer for the conversation with my mom. It's the hopeful future where I am loved and accepted for exactly who I am.",
+                "the end of the world (cover)": "A song of ultimate trust. I made my own cover of this for my one-month anniversary with Kirill to show him how much I trust him.",
+                "You Need Me, I Don't Need You": "This is the song that proves his genius. For me, it's also about a declaration of independence and self-worth.",
+                "Bloodstream": "The feeling of the fire on my face in the front row. It's the soundtrack to pure, chaotic, beautiful energy.",
+                "Afterglow": "For me, this word means the beautiful, sad, nostalgic glow that a person leaves on your soul, even when they're gone.",
+                "The A Team": "The first song that truly showed me the depth of his songwriting. The sound of birds in the music video is a core memory for me.",
+                "Small Bump": "This chorus holds one of the most comforting lines ever written. For me, it's about the simple, safe feeling of holding Kirill's hand.",
+                "Castle On The Hill": "The feeling of pure, explosive freedom. Of being young and just running.",
+                "Home": "After hearing this live, it became the song about finding a home not in a place, but in a person. For me, home is Kirill and Nikita.",
+                "A Little More": "This is my secret anthem of revenge. It's the song I will use to take back my power from the heartbreak Lisa caused."
+            };
+
             const albumArtMap = {
                 "+": "https://upload.wikimedia.org/wikipedia/en/3/3f/Ed_Sheeran_%2B_cover.png",
                 "-": "https://upload.wikimedia.org/wikipedia/en/e/e4/Ed_Sheeran_-_Subtract.png",
@@ -338,23 +467,34 @@
                 "÷": "https://upload.wikimedia.org/wikipedia/en/4/45/Divide_cover.png",
                 "×": "https://upload.wikimedia.org/wikipedia/en/a/ad/X_cover.png",
                 "No.6": "https://upload.wikimedia.org/wikipedia/en/4/4f/Ed_Sheeran_-_No._6_Collaborations_Project.png",
-                "♡": "https://upload.wikimedia.org/wikipedia/en/7/7d/Ed_Sheeran_-_Play.png",
+                "♡": "https://upload.wikimedia.org/wikipedia/en/6/64/Ed_Sheeran_-_Autumn_Variations.png",
                 "Loose Change": "https://upload.wikimedia.org/wikipedia/en/2/23/Loose_Change_%28EP%29_by_Ed_Sheeran_%28artwork%29.jpg",
-                "Hobbit": "https://www.musicroom.com/product/image/medium/dam447097_0.jpg"
+                "Hobbit": "https://www.musicroom.com/product/image/medium/dam447097_0.jpg",
+                "Single": "https://i.imgur.com/gK5yU1m.png" // Generic single icon
             };
+            
 
-            function populateTable() {
+            function populateTable(albumFilter = 'all') {
                 const tableBody = document.getElementById('table-body');
-                document.getElementById('main-title').textContent = songData.title;
                 tableBody.innerHTML = '';
 
-                songData.categories.forEach(category => {
-                    const songs = category.songs;
-                    if (songs.length === 0) return;
+                // Create a filtered version of the data based on the selected album
+                const filteredCategories = songData.categories.map(category => {
+                    const filteredSongs = category.songs.filter(song => 
+                        albumFilter === 'all' || song.album === albumFilter
+                    );
+                    // Return a new category object with only the filtered songs
+                    return { ...category, songs: filteredSongs };
+                }).filter(category => category.songs.length > 0); // Exclude categories with no matching songs
 
+
+                filteredCategories.forEach(category => {
+                    const songs = category.songs;
+                    
                     songs.forEach((song, index) => {
                         const row = document.createElement('tr');
 
+                        // Add the emotion cell only for the first song in the category
                         if (index === 0) {
                             const emotionCell = document.createElement('td');
                             emotionCell.rowSpan = songs.length;
@@ -362,15 +502,31 @@
                             emotionCell.classList.add('emotion-cell');
                             row.appendChild(emotionCell);
                         }
-
+                        
+                        // --- Song Title Cell with Tooltip ---
                         const titleCell = document.createElement('td');
-                        titleCell.textContent = song.title;
+                        titleCell.classList.add('song-title-cell');
+                        
+                        let titleHTML = song.title;
+                        if (song.artist) {
+                             titleHTML += `<span class="artist-credit">by ${song.artist}</span>`;
+                        }
+
+                        if (songNotes[song.title]) {
+                            titleHTML += `
+                                <span class="tooltip-container" tabindex="0">
+                                    <i class="info-icon">?</i>
+                                    <span class="tooltip-text">${songNotes[song.title]}</span>
+                                </span>`;
+                        }
+                        titleCell.innerHTML = titleHTML;
                         row.appendChild(titleCell);
 
+                        // --- Album Cell with Image Tooltip ---
                         const albumCell = document.createElement('td');
                         albumCell.classList.add('album-cell');
                         if (albumArtMap[song.album]) {
-                            albumCell.innerHTML = `<img src="${albumArtMap[song.album]}" alt="Album art for ${song.album}">`;
+                            albumCell.innerHTML = `<img src="${albumArtMap[song.album]}" alt="Album art for ${song.album}" title="${song.album}">`;
                         } else {
                             albumCell.textContent = song.album;
                         }
@@ -381,9 +537,52 @@
                 });
             }
             
-            populateTable();
+            function createFilterControls() {
+                const filterContainer = document.getElementById('album-filter-container');
+                
+                // Get all unique album names
+                const allAlbums = songData.categories.flatMap(cat => cat.songs.map(song => song.album));
+                const uniqueAlbums = [...new Set(allAlbums)].sort();
+
+                // Create "All" button
+                const allButton = document.createElement('button');
+                allButton.textContent = 'All Albums';
+                allButton.classList.add('filter-btn', 'active');
+                allButton.dataset.album = 'all';
+                filterContainer.appendChild(allButton);
+
+                // Create buttons for each unique album
+                uniqueAlbums.forEach(album => {
+                    const button = document.createElement('button');
+                    button.textContent = album;
+                    button.classList.add('filter-btn');
+                    button.dataset.album = album;
+                    filterContainer.appendChild(button);
+                });
+                
+                // Add event listener to the container (event delegation)
+                filterContainer.addEventListener('click', function(event) {
+                    if (event.target.tagName === 'BUTTON') {
+                        // Remove active class from all buttons
+                        filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                        // Add active class to the clicked button
+                        event.target.classList.add('active');
+                        // Repopulate the table with the selected filter
+                        const selectedAlbum = event.target.dataset.album;
+                        populateTable(selectedAlbum);
+                    }
+                });
+            }
+
+            function init() {
+                document.getElementById('main-title').textContent = songData.title;
+                createFilterControls();
+                populateTable();
+            }
+            
+            init();
         });
     </script>
 
 </body>
-  </html>
+</html>
