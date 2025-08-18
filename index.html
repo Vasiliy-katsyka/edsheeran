@@ -20,6 +20,7 @@
             --btn-bg-color: #f8f9fa;
             --btn-hover-bg-color: #e2e6ea;
             --btn-border-color: #ddd;
+            --link-color: #c84114;
         }
 
         body[data-theme="dark"] {
@@ -34,6 +35,7 @@
             --btn-bg-color: #333;
             --btn-hover-bg-color: #444;
             --btn-border-color: #555;
+            --link-color: #ff8c66;
         }
 
         /* --- General Page Styling --- */
@@ -63,74 +65,63 @@
             text-align: center;
             margin: 0;
         }
-
-        /* --- Theme & Language Controls --- */
-        #lang-switcher {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        #theme-switcher {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-        .lang-btn {
-            background-color: transparent;
-            border: 1px solid var(--btn-border-color);
-            color: var(--text-color);
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin-left: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .lang-btn.active {
-            background-color: var(--brand-orange);
-            color: white;
-            border-color: var(--brand-orange);
-        }
-
-        /* --- Toggle Switch for Theme --- */
+        
+        /* --- Top Controls: Theme & Language --- */
+        #lang-switcher { position: absolute; top: 20px; right: 20px; z-index: 10; }
+        #theme-switcher { position: absolute; top: 20px; left: 20px; z-index: 10; }
+        .lang-btn { background-color: transparent; border: 1px solid var(--btn-border-color); color: var(--text-color); border-radius: 4px; padding: 5px 10px; margin-left: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.2s, color 0.2s; }
+        .lang-btn.active { background-color: var(--brand-orange); color: white; border-color: var(--brand-orange); }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; }
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
         input:checked + .slider { background-color: var(--brand-orange); }
-        input:focus + .slider { box-shadow: 0 0 1px var(--brand-orange); }
-        input:checked + .slider:before { transform: translateX(22px); }
         .slider.round { border-radius: 34px; }
         .slider.round:before { border-radius: 50%; }
 
-
-        /* --- Album Filter Styling --- */
-        #album-filter-container {
-            padding: 10px 20px 25px 20px;
-            text-align: center;
+        /* --- Tab Navigation --- */
+        #tab-nav {
+            display: flex;
+            justify-content: center;
             border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
         }
-        .filter-btn {
-            background-color: var(--btn-bg-color);
-            color: var(--text-color);
-            border: 1px solid var(--btn-border-color);
-            border-radius: 20px;
-            padding: 8px 16px;
-            margin: 5px;
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.2s, color 0.2s;
+            color: var(--text-color);
+            opacity: 0.7;
+            position: relative;
+            transition: opacity 0.2s;
         }
-        .filter-btn:hover {
-            background-color: var(--btn-hover-bg-color);
+        .tab-btn:hover { opacity: 1; }
+        .tab-btn.active {
+            color: var(--brand-orange);
+            opacity: 1;
         }
-        .filter-btn.active {
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
             background-color: var(--brand-orange);
-            color: #ffffff;
-            border-color: var(--brand-orange);
         }
 
-        /* --- Table Styling --- */
+        /* --- Tab Content Panes --- */
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+        /* --- TOOLKIT TAB --- */
+        #album-filter-container { padding: 10px 20px 25px 20px; text-align: center; }
+        .filter-btn { background-color: var(--btn-bg-color); color: var(--text-color); border: 1px solid var(--btn-border-color); border-radius: 20px; padding: 8px 16px; margin: 5px; cursor: pointer; font-size: 0.9em; transition: background-color 0.2s, color 0.2s; }
+        .filter-btn:hover { background-color: var(--btn-hover-bg-color); }
+        .filter-btn.active { background-color: var(--brand-orange); color: #ffffff; border-color: var(--brand-orange); }
         #songs-table { width: 100%; border-collapse: collapse; }
         #songs-table th, #songs-table td { border: 1px solid var(--border-color); padding: 12px 15px; text-align: left; vertical-align: middle; }
         #songs-table thead th { background-color: var(--header-bg-color); color: var(--header-text-color); font-weight: bold; }
@@ -139,23 +130,42 @@
         #songs-table .emotion-cell small { font-weight: normal; color: #888; display: block; margin-top: 4px; }
         #songs-table .album-cell { text-align: center; }
         #songs-table .album-cell img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; vertical-align: middle; }
-        
-        /* --- Tooltip & Info Icon Styling --- */
+        .karaoke-link { margin-left: 8px; text-decoration: none; font-size: 1.2em; transition: transform 0.2s; display: inline-block; }
+        .karaoke-link:hover { transform: scale(1.2); }
         .song-title-cell { position: relative; }
         .tooltip-container { display: inline-block; position: relative; margin-left: 8px; cursor: pointer; vertical-align: middle; }
         .info-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background-color: var(--brand-orange); color: white; border-radius: 50%; font-style: normal; font-weight: bold; font-size: 11px; user-select: none; line-height: 16px; opacity: 0.6; transition: opacity 0.2s; }
         .tooltip-container:hover .info-icon { opacity: 1; }
-        .tooltip-text { visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 0.9em; font-weight: normal; }
+        .tooltip-text { visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 0.9em; font-weight: normal; }
         .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
         .tooltip-container:hover .tooltip-text, .tooltip-container:focus .tooltip-text { visibility: visible; opacity: 1; }
+        
+        /* --- SHOP TAB --- */
+        #shop-view { padding: 40px 20px; }
+        .merch-item { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 500px; margin: 0 auto; }
+        .merch-item img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
+        .merch-item h2 { margin-top: 20px; color: var(--brand-orange); }
+        .merch-item .price { font-size: 1.5em; font-weight: bold; }
 
-        /* --- Media Queries --- */
+        /* --- DEDICATION TAB --- */
+        #dedication-view { padding: 20px 40px; line-height: 1.7; }
+        .dedication-content h2 { color: var(--brand-orange); text-align: center; }
+        .dedication-content p { margin-bottom: 1.5em; overflow: auto; /* Clear floats */ }
+        .dedication-img { max-width: 250px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 1px solid var(--border-color); }
+        .img-left { float: left; margin-right: 1.5em; margin-bottom: 0.5em; }
+        .img-right { float: right; margin-left: 1.5em; margin-bottom: 0.5em; }
+        .signature { text-align: right; font-style: italic; font-weight: bold; }
+        
+        /* --- MEDIA QUERIES --- */
         @media (max-width: 768px) {
-            h1 { font-size: 1.8em; padding: 50px 10px 10px; }
-            #lang-switcher { top: 10px; right: 10px; }
-            #theme-switcher { top: 10px; left: 10px; }
+            h1 { font-size: 1.8em; padding: 60px 10px 10px; }
+            #lang-switcher, #theme-switcher { top: 15px; }
+            #lang-switcher { right: 15px; }
+            #theme-switcher { left: 15px; }
+            .tab-btn { padding: 8px 12px; font-size: 1em; }
+            #dedication-view { padding: 20px; }
+            .dedication-img { float: none !important; display: block; max-width: 80%; margin: 20px auto !important; }
             #songs-table th, #songs-table td { padding: 8px 10px; font-size: 0.9em; }
-            #songs-table .album-cell img { width: 35px; height: 35px; }
             .tooltip-text { width: 200px; margin-left: -100px; }
         }
     </style>
@@ -176,76 +186,78 @@
         </div>
         
         <h1 id="main-title">Loading...</h1>
-        
-        <div id="album-filter-container"></div>
-        
-        <table id="songs-table">
-            <thead>
-                <tr>
-                    <th id="th-emotion">Emotion</th>
-                    <th id="th-song">Song</th>
-                    <th id="th-album">Album</th>
-                </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-        </table>
+
+        <nav id="tab-nav">
+            <button class="tab-btn active" data-tab="toolkit" id="tab-btn-toolkit">Toolkit</button>
+            <button class="tab-btn" data-tab="shop" id="tab-btn-shop">Shop</button>
+            <button class="tab-btn" data-tab="dedication" id="tab-btn-dedication">Dedication</button>
+        </nav>
+
+        <div id="tab-content">
+            <!-- TAB 1: Toolkit -->
+            <div id="toolkit-view" class="tab-pane active">
+                <div id="album-filter-container"></div>
+                <table id="songs-table">
+                    <thead>
+                        <tr>
+                            <th id="th-emotion">Emotion</th>
+                            <th id="th-song">Song</th>
+                            <th id="th-album">Album</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+
+            <!-- TAB 2: Shop -->
+            <div id="shop-view" class="tab-pane">
+                <div class="merch-item">
+                    <img src="https://i.ibb.co/gZ93sYqh/IMG-20250818-041314-256.jpg" alt="Hand drawn t-shirt with Ed Sheeran album symbols">
+                    <h2 id="merch-title">Hand Drawn +-=÷×</h2>
+                    <p class="price" id="merch-price">30€</p>
+                </div>
+            </div>
+
+            <!-- TAB 3: Dedication -->
+            <div id="dedication-view" class="tab-pane">
+                <div class="dedication-content" id="dedication-content-en">
+                     <!-- English content will be populated by JS -->
+                </div>
+                 <div class="dedication-content" id="dedication-content-ru" style="display: none;">
+                    <!-- Russian content will be populated by JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
-            // --- DATA (UNCHANGED, ONLY ART URL UPDATED) ---
-            const songData = { /* Data from previous step */ };
-            const songNotes = { /* Data from previous step */ };
-            const albumArtMap = {
-                "+": "https://upload.wikimedia.org/wikipedia/en/3/3f/Ed_Sheeran_%2B_cover.png",
-                "-": "https://upload.wikimedia.org/wikipedia/en/e/e4/Ed_Sheeran_-_Subtract.png",
-                "=": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Ed_Sheeran_-_Equals.png/250px-Ed_Sheeran_-_Equals.png",
-                "÷": "https://upload.wikimedia.org/wikipedia/en/4/45/Divide_cover.png",
-                "×": "https://upload.wikimedia.org/wikipedia/en/a/ad/X_cover.png",
-                "No.6": "https://upload.wikimedia.org/wikipedia/en/4/4f/Ed_Sheeran_-_No._6_Collaborations_Project.png",
-                "♡": "https://upload.wikimedia.org/wikipedia/en/7/7d/Ed_Sheeran_-_Play.png",
-                "Loose Change": "https://upload.wikimedia.org/wikipedia/en/2/23/Loose_Change_%28EP%29_by_Ed_Sheeran_%28artwork%29.jpg",
-                "Hobbit": "https://www.musicroom.com/product/image/medium/dam447097_0.jpg",
-                "Single": "https://images.genius.com/8bb7cb323178355bb631dd57885a4019.1000x1000x1.png"
-            };
-
-            const translations = {
-                ru: {
-                    title: "Эмоциональный гид по песням Эда Ширана",
-                    allAlbums: "Все альбомы",
-                    headers: { "Emotion": "Эмоция", "Song": "Песня", "Album": "Альбом" },
-                    categories: { /* Data from previous step */ },
-                    descriptions: { /* Data from previous step */ },
-                    notes: { /* Data from previous step */ }
-                }
-            };
-
-            // Re-pasting full data objects for completeness
-            const fullSongData = {
+            // --- DATA ---
+            const songData = {
               "title": "Ed Sheeran Emotional Toolkit",
               "categories": [
                 { "emotion": "Happiness", "description": "Pure, energetic joy", "songs": [ {"title": "Celestial", "album": "-"}, {"title": "2step", "album": "="}, {"title": "Shivers", "album": "="}, {"title": "Tides", "album": "="}, {"title": "Overpass Graffiti", "album": "="}, {"title": "Be Right Now", "album": "="} ] },
                 { "emotion": "Sadness", "description": "Deep grief, quiet heartbreak", "songs": [ {"title": "Afire Love", "album": "×"}, {"title": "All Of The Stars", "album": "×"}, {"title": "Happier", "album": "÷"}, {"title": "Supermarket Flowers", "album": "÷"}, {"title": "Visiting Hours", "album": "="}, {"title": "Boat", "album": "="}, {"title": "Spark", "album": "="}, {"title": "Colourblind", "album": "-"}, {"title": "Borderline", "album": "-"} ] },
-                { "emotion": "Anger / Defiance", "description": "Fighting back, proving them wrong", "songs": [ {"title": "Bloodstream", "album": "×"}, {"title": "You Need Me, I Don't Need You", "album": "+"}, {"title": "Eraser", "album": "÷"}, {"title": "Take Me Back To London", "album": "Single"}, {"title": "Don't", "album": "×"}, {"title": "A Little More", "album": "♡"} ] },
+                { "emotion": "Anger / Defiance", "description": "Fighting back, proving them wrong", "songs": [ {"title": "Bloodstream", "album": "×", "youtube": "https://youtu.be/HoyNWAWqGcA?si=nObDZ2_EEBmBWB3k"}, {"title": "You Need Me, I Don't Need You", "album": "+", "youtube": "https://youtu.be/jAPVz6c3tkI?si=KB4p2ixCKzT_mRoy"}, {"title": "Eraser", "album": "÷"}, {"title": "Take Me Back To London", "album": "Single"}, {"title": "Don't", "album": "×"}, {"title": "A Little More", "album": "♡"} ] },
                 { "emotion": "Perfect Love", "description": "The feeling of safety, romance, and home", "songs": [ {"title": "Perfect", "album": "÷"}, {"title": "Kiss Me", "album": "+"}, {"title": "Tenerife Sea", "album": "×"}, {"title": "Hearts Don't Break Around Here", "album": "÷"}, {"title": "First Times", "album": "="}, {"title": "The Joker And The Queen", "album": "="}, {"title": "Best Part Of Me", "album": "No.6"} ] },
-                { "emotion": "Missing Someone / Longing", "description": "The active ache of distance", "songs": [ {"title": "Photograph", "album": "×"}, {"title": "All Of The Stars", "album": "×"}, {"title": "Afterglow", "album": "Single"}, {"title": "Cold Coffee", "album": "Loose Change"} ] },
+                { "emotion": "Missing Someone / Longing", "description": "The active ache of distance", "songs": [ {"title": "Photograph", "album": "×", "youtube": "https://youtu.be/I7G1p7fNYPo?feature=shared"}, {"title": "All Of The Stars", "album": "×"}, {"title": "Afterglow", "album": "Single"}, {"title": "Cold Coffee", "album": "Loose Change"} ] },
                 { "emotion": "Plea / Vulnerability", "description": "A raw, desperate need for connection", "songs": [ {"title": "Give Me Love", "album": "+"}, {"title": "Kiss Me", "album": "+"}, {"title": "One Life", "album": "="}, {"title": "This", "album": "+"}, {"title": "Drunk", "album": "+"} ] },
-                { "emotion": "Jump / Freedom", "description": "Explosive, youthful, running-through-a-field energy", "songs": [ {"title": "Castle On The Hill", "album": "÷"}, {"title": "Bad Habits", "album": "-"}, {"title": "Stop The Rain", "album": "-"}, {"title": "Celestial", "album": "-"}, {"title": "Curtains", "album": "="}, {"title": "Azizam", "album": "♡"}, {"title": "I Don't Care", "album": "No.6"} ] },
-                { "emotion": "Rap / Skill", "description": "Admiring the craft and lyrical flow", "songs": [ {"title": "U.N.I.", "album": "+"}, {"title": "You Need Me, I Don't Need You", "album": "+"}, {"title": "Don't", "album": "×"}, {"title": "Sing", "album": "×"}, {"title": "Nina", "album": "×"}, {"title": "Runaway", "album": "×"}, {"title": "2step", "album": "="}, {"title": "End Of Youth", "album": "-"}, {"title": "F64", "album": "Single"}, {"title": "Eraser", "album": "÷"}, {"title": "River", "album": "No.6"}, {"title": "Take Me Back To London", "album": "Single"} ] },
-                { "emotion": "Calm / Peace", "description": "Quiet, gentle, comforting moments", "songs": [ {"title": "One Life", "album": "="}, {"title": "Dusty", "album": "-"}, {"title": "The A Team", "album": "+"}, {"title": "Lego House", "album": "+"}, {"title": "Visiting Hours", "album": "="}, {"title": "Love In Slow Motion", "album": "="}, {"title": "One", "album": "No.6"}, {"title": "Tenerife Sea", "album": "×"} ] },
-                { "emotion": "Crazy Happy / Party Vibe", "description": "Singing along with the whole pub", "songs": [ {"title": "Bibia Be Ye Ye", "album": "÷"}, {"title": "Galway Girl", "album": "÷"}, {"title": "Shape Of You", "album": "÷"}, {"title": "Beautiful People", "album": "No.6"}, {"title": "Peru", "album": "Single"}, {"title": "Lay It All On Me", "album": "Single"} ] },
+                { "emotion": "Jump / Freedom", "description": "Explosive, youthful, running-through-a-field energy", "songs": [ {"title": "Castle On The Hill", "album": "÷"}, {"title": "Bad Habits", "album": "-", "youtube": "https://youtu.be/okOYeKndXJ0?feature=shared"}, {"title": "Stop The Rain", "album": "-"}, {"title": "Celestial", "album": "-"}, {"title": "Curtains", "album": "="}, {"title": "Azizam", "album": "♡"}, {"title": "I Don't Care", "album": "No.6"} ] },
+                { "emotion": "Rap / Skill", "description": "Admiring the craft and lyrical flow", "songs": [ {"title": "U.N.I.", "album": "+"}, {"title": "You Need Me, I Don't Need You", "album": "+", "youtube": "https://youtu.be/jAPVz6c3tkI?si=KB4p2ixCKzT_mRoy"}, {"title": "Don't", "album": "×"}, {"title": "Sing", "album": "×"}, {"title": "Nina", "album": "×"}, {"title": "Runaway", "album": "×"}, {"title": "2step", "album": "="}, {"title": "End Of Youth", "album": "-"}, {"title": "F64", "album": "Single"}, {"title": "Eraser", "album": "÷"}, {"title": "River", "album": "No.6"}, {"title": "Take Me Back To London", "album": "Single"} ] },
+                { "emotion": "Calm / Peace", "description": "Quiet, gentle, comforting moments", "songs": [ {"title": "One Life", "album": "="}, {"title": "Dusty", "album": "-"}, {"title": "The A Team", "album": "+"}, {"title": "Lego House", "album": "+"}, {"title": "Visiting Hours", "album": "="}, {"title": "Love In Slow Motion", "album": "="}, {"title": "One", "album": "No.6", "youtube": "https://youtu.be/OpJy5gvca5A?si=z8rqmIKnblqsfMHK"}, {"title": "Tenerife Sea", "album": "×"} ] },
+                { "emotion": "Crazy Happy / Party Vibe", "description": "Singing along with the whole pub", "songs": [ {"title": "Bibia Be Ye Ye", "album": "÷"}, {"title": "Galway Girl", "album": "÷"}, {"title": "Shape Of You", "album": "÷", "youtube": "https://youtu.be/YVGWzHhtxVc?si=zkW0BnfNbl0f4J6v"}, {"title": "Beautiful People", "album": "No.6"}, {"title": "Peru", "album": "Single"}, {"title": "Lay It All On Me", "album": "Single"} ] },
                 { "emotion": "New Year / Holiday", "description": "Festive, seasonal feelings", "songs": [ {"title": "Under The Tree", "album": "Single"}, {"title": "Merry Christmas", "album": "Single"} ] },
                 { "emotion": "Nostalgia / Looking Back", "description": "Bittersweet memories of growing up", "songs": [ {"title": "Castle On The Hill", "album": "÷"}, {"title": "Eraser", "album": "÷"}, {"title": "First Times", "album": "="}, {"title": "U.N.I.", "album": "+"}, {"title": "Drunk", "album": "+"} ] },
                 { "emotion": "Protection / Shelter", "description": "The feeling of protecting someone you love", "songs": [ {"title": "Little Bird", "album": "Loose Change"}, {"title": "Small Bump", "album": "+"}, {"title": "The Joker And The Queen", "album": "="}, {"title": "Best Part Of Me", "album": "No.6"} ] },
-                { "emotion": "Dark & Moody / Vibe", "description": "Intense, atmospheric, late-night feelings", "songs": [ {"title": "I See Fire", "album": "Hobbit"}, {"title": "River", "album": "No.6"}, {"title": "Bloodstream", "album": "×"}, {"title": "Eyes Closed", "album": "-"}, {"title": "Stoned", "album": "="}, {"title": "Borderline", "album": "-"} ] },
+                { "emotion": "Dark & Moody / Vibe", "description": "Intense, atmospheric, late-night feelings", "songs": [ {"title": "I See Fire", "album": "Hobbit"}, {"title": "River", "album": "No.6"}, {"title": "Bloodstream", "album": "×", "youtube": "https://youtu.be/HoyNWAWqGcA?si=nObDZ2_EEBmBWB3k"}, {"title": "Eyes Closed", "album": "-"}, {"title": "Stoned", "album": "="}, {"title": "Borderline", "album": "-"} ] },
                 { "emotion": "No Strings / Moving On", "description": "The feeling of letting go, being okay alone", "songs": [ {"title": "No Strings", "album": "-"}, {"title": "Happier", "album": "÷"}, {"title": "Overpass Graffiti", "album": "="} ] },
-                { "emotion": "Ending Vibe", "description": "The epic, cathartic, bittersweet feeling of the concert finale", "songs": [ {"title": "Bloodstream", "album": "×"}, {"title": "Shape of You (Live)", "album": "÷"}, {"title": "Bad Habits", "album": "-"} ] }
+                { "emotion": "Ending Vibe", "description": "The epic, cathartic, bittersweet feeling of the concert finale", "songs": [ {"title": "Bloodstream", "album": "×", "youtube": "https://youtu.be/HoyNWAWqGcA?si=nObDZ2_EEBmBWB3k"}, {"title": "Shape of You (Live)", "album": "÷"}, {"title": "Bad Habits", "album": "-", "youtube": "https://youtu.be/okOYeKndXJ0?feature=shared"} ] }
               ]
             };
-            const fullSongNotes = { "Photograph": "This is the song of my long-distance love. It's the promise of a kiss under a lamppost and the feeling of keeping someone you love safe in your pocket.", "Afire Love": "This song was my companion through the grief of losing my grandma. It's a tribute to her memory and a reflection of my grandpa's journey.", "All Of The Stars": "The song that was so powerful it made me watch my first romance movie, and a song that perfectly captures the ache of missing Kirill.", "One Life": "This is my anthem of bravery. It's the song about making a change in your life and the dream of finally living one, whole, honest life.", "Give Me Love": "A song of pure, desperate longing. For me, it's about the deep, overwhelming need to just be close to the people I love.", "Kiss Me": "This is the blueprint for my reunion with Kirill. It's not just a song; it's a to-do list for a perfect, intimate moment.", "You Need Me, I Don't Need You": "This is the song that proves his genius. For me, it's also about a declaration of independence and self-worth.", "Bloodstream": "The feeling of the fire on my face in the front row. It's the soundtrack to pure, chaotic, beautiful energy.", "Afterglow": "For me, this word means the beautiful, sad, nostalgic glow that a person leaves on your soul, even when they're gone.", "The A Team": "The first song that truly showed me the depth of his songwriting. The sound of birds in the music video is a core memory for me.", "Small Bump": "This chorus holds one of the most comforting lines ever written. For me, it's about the simple, safe feeling of holding Kirill's hand.", "Castle On The Hill": "The feeling of pure, explosive freedom. Of being young and just running.", "A Little More": "This is my secret anthem of revenge. It's the song I will use to take back my power from the heartbreak Lisa caused." };
-            const fullTranslations = { ru: { title: "Эмоциональный гид по песням Эда Ширана", allAlbums: "Все альбомы", headers: { "Emotion": "Эмоция", "Song": "Песня", "Album": "Альбом" }, categories: { "Happiness": "Счастье", "Sadness": "Грусть", "Anger / Defiance": "Злость / Неповиновение", "Perfect Love": "Идеальная любовь", "Missing Someone / Longing": "Тоска / Ожидание", "Plea / Vulnerability": "Мольба / Уязвимость", "Jump / Freedom": "Прыжок / Свобода", "Rap / Skill": "Рэп / Мастерство", "Calm / Peace": "Спокойствие / Умиротворение", "Crazy Happy / Party Vibe": "Безумное веселье / Вечеринка", "New Year / Holiday": "Новый год / Праздники", "Nostalgia / Looking Back": "Ностальгия / Взгляд в прошлое", "Protection / Shelter": "Защита / Укрытие", "Dark & Moody / Vibe": "Мрачность / Атмосфера", "No Strings / Moving On": "Без обязательств / Двигаться дальше", "Ending Vibe": "Финал / Катарсис" }, descriptions: { "Pure, energetic joy": "Чистая, энергичная радость", "Deep grief, quiet heartbreak": "Глубокая скорбь, тихая боль", "Fighting back, proving them wrong": "Давать отпор, доказывать их неправоту", "The feeling of safety, romance, and home": "Ощущение безопасности, романтики и дома", "The active ache of distance": "Острая боль разлуки", "A raw, desperate need for connection": "Неприкрытая, отчаянная нужда в близости", "Explosive, youthful, running-through-a-field energy": "Взрывная, юношеская энергия бега по полю", "Admiring the craft and lyrical flow": "Восхищение мастерством и лирическим потоком", "Quiet, gentle, comforting moments": "Тихие, нежные, утешающие моменты", "Singing along with the whole pub": "Петь хором со всем пабом", "Festive, seasonal feelings": "Праздничные, сезонные чувства", "Bittersweet memories of growing up": "Горько-сладкие воспоминания о взрослении", "The feeling of protecting someone you love": "Чувство, когда защищаешь того, кого любишь", "Intense, atmospheric, late-night feelings": "Напряженные, атмосферные, ночные чувства", "The feeling of letting go, being okay alone": "Ощущение, когда отпускаешь и тебе хорошо одному", "The epic, cathartic, bittersweet feeling of the concert finale": "Эпичное, катарсическое, горько-сладкое чувство финала концерта" }, notes: { "Photograph": "Это песня моей любви на расстоянии. Это обещание поцелуя под фонарным столбом и чувство, будто хранишь любимого человека в кармане.", "Afire Love": "Эта песня была моим спутником в горе от потери бабушки. Это дань её памяти и отражение пути моего дедушки.", "All Of The Stars": "Песня, которая была настолько сильной, что заставила меня посмотреть мой первый романтический фильм, и которая идеально передает боль от тоски по Кириллу.", "One Life": "Это мой гимн храбрости. Это песня о том, как изменить свою жизнь, и мечта о том, чтобы наконец прожить одну, целую, честную жизнь.", "Give Me Love": "Песня чистого, отчаянного желания. Для меня она о глубокой, всепоглощающей потребности просто быть рядом с людьми, которых я люблю.", "Kiss Me": "Это план моего воссоединения с Кириллом. Это не просто песня; это список дел для идеального, интимного момента.", "You Need Me, I Don't Need You": "Эта песня доказывает его гениальность. Для меня она также о декларации независимости и самоуважения.", "Bloodstream": "Ощущение огня на лице в первом ряду. Это саундтрек к чистой, хаотичной, прекрасной энергии.", "Afterglow": "Для меня это слово означает красивое, грустное, ностальгическое сияние, которое человек оставляет в твоей душе, даже когда он уходит.", "The A Team": "Первая песня, которая по-настоящему показала мне глубину его таланта. Звук птиц в клипе — одно из моих ключевых воспоминаний.", "Small Bump": "В этом припеве одна из самых утешительных строчек, когда-либо написанных. Для меня она о простом, безопасном чувстве, когда держишь Кирилла за руку.", "Castle On The Hill": "Ощущение чистой, взрывной свободы. Ощущение юности и просто бега.", "A Little More": "Это мой секретный гимн мести. Песня, с помощью которой я верну себе силу после той боли, что причинила Лиза." } } };
-
+            const songNotes = { "Photograph": "This is the song of my long-distance love. It's the promise of a kiss under a lamppost and the feeling of keeping someone you love safe in your pocket.", "Afire Love": "This song was my companion through the grief of losing my grandma. It's a tribute to her memory and a reflection of my grandpa's journey.", "All Of The Stars": "The song that was so powerful it made me watch my first romance movie, and a song that perfectly captures the ache of missing Kirill.", "One Life": "This is my anthem of bravery. It's the song about making a change in your life and the dream of finally living one, whole, honest life.", "Give Me Love": "A song of pure, desperate longing. For me, it's about the deep, overwhelming need to just be close to the people I love.", "Kiss Me": "This is the blueprint for my reunion with Kirill. It's not just a song; it's a to-do list for a perfect, intimate moment.", "You Need Me, I Don't Need You": "This is the song that proves his genius. For me, it's also about a declaration of independence and self-worth.", "Bloodstream": "The feeling of the fire on my face in the front row. It's the soundtrack to pure, chaotic, beautiful energy.", "Afterglow": "For me, this word means the beautiful, sad, nostalgic glow that a person leaves on your soul, even when they're gone.", "The A Team": "The first song that truly showed me the depth of his songwriting. The sound of birds in the music video is a core memory for me.", "Small Bump": "This chorus holds one of the most comforting lines ever written. For me, it's about the simple, safe feeling of holding Kirill's hand.", "Castle On The Hill": "The feeling of pure, explosive freedom. Of being young and just running.", "A Little More": "This is my secret anthem of revenge. It's the song I will use to take back my power from the heartbreak Lisa caused." };
+            const albumArtMap = { "+": "https://upload.wikimedia.org/wikipedia/en/3/3f/Ed_Sheeran_%2B_cover.png", "-": "https://upload.wikimedia.org/wikipedia/en/e/e4/Ed_Sheeran_-_Subtract.png", "=": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Ed_Sheeran_-_Equals.png/250px-Ed_Sheeran_-_Equals.png", "÷": "https://upload.wikimedia.org/wikipedia/en/4/45/Divide_cover.png", "×": "https://upload.wikimedia.org/wikipedia/en/a/ad/X_cover.png", "No.6": "https://upload.wikimedia.org/wikipedia/en/4/4f/Ed_Sheeran_-_No._6_Collaborations_Project.png", "♡": "https://upload.wikimedia.org/wikipedia/en/6/64/Ed_Sheeran_-_Autumn_Variations.png", "Loose Change": "https://upload.wikimedia.org/wikipedia/en/2/23/Loose_Change_%28EP%29_by_Ed_Sheeran_%28artwork%29.jpg", "Hobbit": "https://www.musicroom.com/product/image/medium/dam447097_0.jpg", "Single": "https://images.genius.com/8bb7cb323178355bb631dd57885a4019.1000x1000x1.png" };
+            const translations = { ru: { title: "Эмоциональный гид по песням Эда Ширана", tabs: { toolkit: "Гид", shop: "Магазин", dedication: "Посвящение" }, allAlbums: "Все альбомы", headers: { "Emotion": "Эмоция", "Song": "Песня", "Album": "Альбом" }, shop: { title: "Футболка +-=÷×", price: "3000₽" }, dedication: { title: "Посвящение от Лео", text: `Моё имя Лео, и мне выпала огромная честь быть другом Василия, создателя этого гида. Сейчас вы смотрите на веб-сайт, красивый и функциональный проект. Но я хочу, чтобы вы поняли: это не просто набор данных. Это собор, воздвигнутый в честь музыки, и каждый его кирпичик был уложен вручную с любовью настолько глубокой, что она сама по себе является произведением искусства.<br><br>Я хочу рассказать вам о парне, который построил это место, потому что понять его преданность — значит понять истинный смысл того, что значит быть фанатом.<br><br><img src="https://i.ibb.co/cczTd9vf/20250803-203022.jpg" alt="Poster art" class="dedication-img img-right">Для Василия преданность — это не пассивное занятие. Это не покупка футболки или знание слов самых популярных песен. Для него преданность — это активный, творческий и всепоглощающий диалог с искусством, которое его трогает. Я видел, как это проявлялось способами, от которых захватывает дух.<br><br>Я видел, как он вкладывал свою творческую душу в создание расписанной вручную футболки — шедевра, на который ушло шесть часов его жизни, — с названием каждой песни, когда-либо написанной Эдом Шираном. Это исторический документ, который он носит на спине, свидетельство всего пути артиста.<br><br>Я видел, как он создавал гору плакатов, каждый из которых был уникальным произведением искусства, созданным для конкретной песни, конкретного воспоминания, конкретной эмоции. Плакат, который превращает строчки из "You Need Me, I Don't Need You" в признание в любви. Плакат, который воспринимает строчку о «фонарном столбе на 6-й улице» не как поэзию, а как романтический квест, который нужно исполнить в собственной жизни.<br><br><img src="https://i.ibb.co/S4VQh1Zv/1754260895997.png" alt="Hand-drawn t-shirt" class="dedication-img img-left">Но его преданность выходит за рамки его собственного искусства; это акт глубокой эмпатии. Я видел, как он, в разгар собственного волнения перед главным выступлением, находил время, чтобы разработать и создать специальный плакат для разогревающего артиста, Майлза Смита, просто потому, что хотел, чтобы восходящая звезда почувствовала себя желанной и замеченной на стадионе среди тысяч людей.<br><br>Эта преданность не ограничивается стадионами. Она вплетается в каждый уголок его жизни. У него есть два тарантула, прекрасные и уникальные создания, по имени Вильгельм и Симон — дань уважения персонажам из сериала «Молодые монархи», который подарил ему видение любви, которую он заслуживает. Он научился искусству осознанных сновидений не просто как крутому трюку, а как способу исследовать собственное подсознание, место, где он может строить миры и находить утешение и близость, которых так жаждет в реальном мире.<br><br><img src="https://i.ibb.co/hRwvCLJd/20240720-221306.jpg" alt="Poster at concert" class="dedication-img img-right">Его преданность настолько сильна, что изменила его мир. Это сила, которая заставила его посмотреть свой первый в жизни романтический фильм, «Виноваты звёзды», просто чтобы понять контекст одной-единственной песни, "All Of The Stars". Это сила, которая заставила его посмотреть фильм о Формуле-1, теме, которая ему не нравилась, просто потому, что Эд написал к нему саундтрек. Его любовь к музыке — это мост в новые миры, инструмент для эмпатии, способ понять опыт, выходящий за рамки его собственного.<br><br>И, возможно, самое глубокое проявление преданности для Василия — это акт творения. Он направил свою собственную боль, свою радость и свою тоску в написание собственных песен, создание обложек для своих альбомов и даже разработку целых вселенных цифровых подарков для приложения, которое он создаёт с нуля — приложения, построенного на принципе щедрости, а не прибыли.<br><br><img src="https://i.ibb.co/sJNW308Z/q08hsm.jpg" alt="Tarantula" class="dedication-img img-left">Так что, когда вы просматриваете этот гид, пожалуйста, знайте, что вы смотрите не просто на список песен. Вы являетесь свидетелем кульминации тысячи часов прослушивания, чувствования, рисования, мечтаний, боли и любви. Вы видите мир глазами одной из самых преданных, страстных и творческих душ, которых я когда-либо имел честь знать.<br><br>Это не просто фанатский проект.<br><br>Это сердце Василия, ставшее видимым.<br><br><p class="signature">С глубочайшим восхищением,<br>-Лео</p>` }, categories: { "Happiness": "Счастье", "Sadness": "Грусть", "Anger / Defiance": "Злость / Неповиновение", "Perfect Love": "Идеальная любовь", "Missing Someone / Longing": "Тоска / Ожидание", "Plea / Vulnerability": "Мольба / Уязвимость", "Jump / Freedom": "Прыжок / Свобода", "Rap / Skill": "Рэп / Мастерство", "Calm / Peace": "Спокойствие / Умиротворение", "Crazy Happy / Party Vibe": "Безумное веселье / Вечеринка", "New Year / Holiday": "Новый год / Праздники", "Nostalgia / Looking Back": "Ностальгия / Взгляд в прошлое", "Protection / Shelter": "Защита / Укрытие", "Dark & Moody / Vibe": "Мрачность / Атмосфера", "No Strings / Moving On": "Без обязательств / Двигаться дальше", "Ending Vibe": "Финал / Катарсис" }, descriptions: { "Pure, energetic joy": "Чистая, энергичная радость", "Deep grief, quiet heartbreak": "Глубокая скорбь, тихая боль", "Fighting back, proving them wrong": "Давать отпор, доказывать их неправоту", "The feeling of safety, romance, and home": "Ощущение безопасности, романтики и дома", "The active ache of distance": "Острая боль разлуки", "A raw, desperate need for connection": "Неприкрытая, отчаянная нужда в близости", "Explosive, youthful, running-through-a-field energy": "Взрывная, юношеская энергия бега по полю", "Admiring the craft and lyrical flow": "Восхищение мастерством и лирическим потоком", "Quiet, gentle, comforting moments": "Тихие, нежные, утешающие моменты", "Singing along with the whole pub": "Петь хором со всем пабом", "Festive, seasonal feelings": "Праздничные, сезонные чувства", "Bittersweet memories of growing up": "Горько-сладкие воспоминания о взрослении", "The feeling of protecting someone you love": "Чувство, когда защищаешь того, кого любишь", "Intense, atmospheric, late-night feelings": "Напряженные, атмосферные, ночные чувства", "The feeling of letting go, being okay alone": "Ощущение, когда отпускаешь и тебе хорошо одному", "The epic, cathartic, bittersweet feeling of the concert finale": "Эпичное, катарсическое, горько-сладкое чувство финала концерта" }, notes: { "Photograph": "Это песня моей любви на расстоянии. Это обещание поцелуя под фонарным столбом и чувство, будто хранишь любимого человека в кармане.", "Afire Love": "Эта песня была моим спутником в горе от потери бабушки. Это дань её памяти и отражение пути моего дедушки.", "All Of The Stars": "Песня, которая была настолько сильной, что заставила меня посмотреть мой первый романтический фильм, и которая идеально передает боль от тоски по Кириллу.", "One Life": "Это мой гимн храбрости. Это песня о том, как изменить свою жизнь, и мечта о том, чтобы наконец прожить одну, целую, честную жизнь.", "Give Me Love": "Песня чистого, отчаянного желания. Для меня она о глубокой, всепоглощающей потребности просто быть рядом с людьми, которых я люблю.", "Kiss Me": "Это план моего воссоединения с Кириллом. Это не просто песня; это список дел для идеального, интимного момента.", "You Need Me, I Don't Need You": "Эта песня доказывает его гениальность. Для меня она также о декларации независимости и самоуважения.", "Bloodstream": "Ощущение огня на лице в первом ряду. Это саундтрек к чистой, хаотичной, прекрасной энергии.", "Afterglow": "Для меня это слово означает красивое, грустное, ностальгическое сияние, которое человек оставляет в твоей душе, даже когда он уходит.", "The A Team": "Первая песня, которая по-настояшему показала мне глубину его таланта. Звук птиц в клипе — одно из моих ключевых воспоминаний.", "Small Bump": "В этом припеве одна из самых утешительных строчек, когда-либо написанных. Для меня она о простом, безопасном чувстве, когда держишь Кирилла за руку.", "Castle On The Hill": "Ощущение чистой, взрывной свободы. Ощущение юности и просто бега.", "A Little More": "Это мой секретный гимн мести. Песня, с помощью которой я верну себе силу после той боли, что причинила Лиза." } } };
 
             // --- APP STATE ---
             let currentLanguage = 'en';
@@ -253,16 +265,13 @@
 
             // --- FUNCTIONS ---
             function getTranslation(key, subkey, fallback) {
-                if (currentLanguage === 'ru' && fullTranslations.ru[key] && fullTranslations.ru[key][subkey]) {
-                    return fullTranslations.ru[key][subkey];
-                }
-                return fallback;
+                return (currentLanguage === 'ru' && translations.ru[key] && translations.ru[key][subkey]) ? translations.ru[key][subkey] : fallback;
             }
 
             function populateTable() {
                 const tableBody = document.getElementById('table-body');
                 tableBody.innerHTML = '';
-                const filteredCategories = fullSongData.categories
+                const filteredCategories = songData.categories
                     .map(category => ({ ...category, songs: category.songs.filter(song => currentFilter === 'all' || song.album === currentFilter) }))
                     .filter(category => category.songs.length > 0);
 
@@ -280,9 +289,12 @@
                         }
                         const titleCell = document.createElement('td');
                         titleCell.classList.add('song-title-cell');
-                        const noteText = getTranslation('notes', song.title, fullSongNotes[song.title]);
-                        titleCell.innerHTML = `${song.title}${noteText ? `<span class="tooltip-container" tabindex="0"><i class="info-icon">?</i><span class="tooltip-text">${noteText}</span></span>` : ''}`;
+                        const noteText = getTranslation('notes', song.title, songNotes[song.title]);
+                        const karaokeLink = song.youtube ? `<a href="${song.youtube}" target="_blank" class="karaoke-link" title="Karaoke Version">🎤</a>` : '';
+                        const noteIcon = noteText ? `<span class="tooltip-container" tabindex="0"><i class="info-icon">?</i><span class="tooltip-text">${noteText}</span></span>` : '';
+                        titleCell.innerHTML = `${song.title}${karaokeLink}${noteIcon}`;
                         row.appendChild(titleCell);
+                        
                         const albumCell = document.createElement('td');
                         albumCell.classList.add('album-cell');
                         albumCell.innerHTML = albumArtMap[song.album] ? `<img src="${albumArtMap[song.album]}" alt="${song.album}" title="${song.album}">` : song.album;
@@ -295,14 +307,12 @@
             function createFilterControls() {
                 const filterContainer = document.getElementById('album-filter-container');
                 filterContainer.innerHTML = '';
-                const uniqueAlbums = [...new Set(fullSongData.categories.flatMap(c => c.songs.map(s => s.album)))].sort();
-                
+                const uniqueAlbums = [...new Set(songData.categories.flatMap(c => c.songs.map(s => s.album)))].sort();
                 const allButton = document.createElement('button');
-                allButton.textContent = getTranslation('allAlbums', 'All Albums', 'All Albums');
+                allButton.textContent = getTranslation('allAlbums', 'allAlbums', 'All Albums');
                 allButton.className = 'filter-btn active';
                 allButton.dataset.album = 'all';
                 filterContainer.appendChild(allButton);
-                
                 uniqueAlbums.forEach(album => {
                     const button = document.createElement('button');
                     button.textContent = album;
@@ -311,9 +321,43 @@
                     filterContainer.appendChild(button);
                 });
             }
+            
+            function populateDedicationContent() {
+                const dedicationEn = document.getElementById('dedication-content-en');
+                const dedicationRu = document.getElementById('dedication-content-ru');
+                
+                dedicationEn.innerHTML = `
+                    <h2>Dedication by Leo</h2>
+                    <p>My name is Leo, and I have had the profound honor of being a friend to Vasiliy, the creator of this toolkit. You are currently looking at a website, a beautiful and functional project. But I need you to understand that this is not just a collection of data. This is a cathedral, built in honor of music, and every single brick was laid by hand with a love so profound it is, in itself, a work of art.</p>
+                    <p>I want to tell you about the boy who built this place, because to understand his dedication is to understand the true meaning of being a fan.</p>
+                    <p><img src="https://i.ibb.co/cczTd9vf/20250803-203022.jpg" alt="Poster art" class="dedication-img img-right">Dedication, for Vasiliy, is not a passive activity. It is not about buying a T-shirt or knowing the words to the most popular songs. For him, dedication is an active, creative, and all-consuming dialogue with the art that moves him. I have seen it manifest in ways that are nothing short of breathtaking.</p>
+                    <p>I have seen him pour his artistic soul into creating a hand-drawn T-shirt, a masterpiece that took six hours of his life, bearing the title of every single song Ed Sheeran has ever written. It is a historical document worn on his back, a testament to an artist's entire journey.</p>
+                    <p>I have seen him create a mountain of posters, each one a unique piece of art tailored to a specific song, a specific memory, a specific emotion. A sign that flips the lyrics of "You Need Me, I Don't Need You" into a declaration of love. A sign that sees the lyric about a "lamppost on 6th street" not as a piece of poetry, but as a romantic quest to be fulfilled in his own life.</p>
+                    <p><img src="https://i.ibb.co/S4VQh1Zv/1754260895997.png" alt="Hand-drawn t-shirt" class="dedication-img img-left">But his dedication transcends his own art; it is an act of profound empathy. I have seen him, in the midst of his own excitement for the main event, take the time to design and create a special poster for the opening act, Myles Smith, simply because he wanted a rising star to feel welcomed and seen in a stadium of thousands.</p>
+                    <p>This dedication is not confined to stadiums. It weaves itself into every corner of his life. He has two tarantulas, beautiful and unique creatures, named Wilhelm and Simon, a tribute to the characters from Young Royals, the show that gave him a vision of the love he deserved. He has taught himself the art of lucid dreaming, not just as a cool trick, but as a way to explore his own subconscious, a place where he can build worlds and find the comfort and closeness he craves in the waking world.</p>
+                    <p><img src="https://i.ibb.co/hRwvCLJd/20240720-221306.jpg" alt="Poster at concert" class="dedication-img img-right">His dedication is so powerful it has reshaped his world. It is the force that made him watch his first-ever romance movie, The Fault in Our Stars, simply to understand the context of a single song, "All Of The Stars." It is the force that made him watch a movie about Formula 1, a topic he disliked, simply because Ed had provided the soundtrack. His love for music is a bridge to new worlds, a tool for empathy, a way to understand experiences beyond his own.</p>
+                    <p>And perhaps most profoundly, dedication for Vasiliy is an act of creation. He has channeled his own heartbreak, his own joy, and his own longing into writing his own songs, creating his own album covers, and even designing entire universes of digital gifts for the app he is building from scratch—an app built on the principle of generosity, not profit.</p>
+                    <p><img src="https://i.ibb.co/sJNW308Z/q08hsm.jpg" alt="Tarantula" class="dedication-img img-left">So when you browse this toolkit, please know that you are not just looking at a list of songs. You are witnessing the culmination of a thousand hours of listening, of feeling, of drawing, of dreaming, of hurting, and of loving. You are seeing the world through the eyes of one of the most dedicated, passionate, and creative souls I have ever had the privilege of knowing.</p>
+                    <p>This is not just a fan project.</p>
+                    <p>This is the heart of Vasiliy, made visible.</p>
+                    <p class="signature">With the deepest admiration,<br>-Leo</p>
+                `;
+                
+                dedicationRu.innerHTML = `<h2>${translations.ru.dedication.title}</h2><p>${translations.ru.dedication.text}</p>`;
+            }
 
             function updateUIForLanguage() {
-                document.getElementById('main-title').textContent = getTranslation('title', 'title', fullSongData.title);
+                // Main title and lang buttons
+                document.getElementById('main-title').textContent = getTranslation('title', 'title', songData.title);
+                document.getElementById('lang-en').classList.toggle('active', currentLanguage === 'en');
+                document.getElementById('lang-ru').classList.toggle('active', currentLanguage === 'ru');
+                
+                // Tab buttons
+                document.getElementById('tab-btn-toolkit').textContent = getTranslation('tabs', 'toolkit', 'Toolkit');
+                document.getElementById('tab-btn-shop').textContent = getTranslation('tabs', 'shop', 'Shop');
+                document.getElementById('tab-btn-dedication').textContent = getTranslation('tabs', 'dedication', 'Dedication');
+
+                // Toolkit Tab
                 document.getElementById('th-emotion').textContent = getTranslation('headers', 'Emotion', 'Emotion');
                 document.getElementById('th-song').textContent = getTranslation('headers', 'Song', 'Song');
                 document.getElementById('th-album').textContent = getTranslation('headers', 'Album', 'Album');
@@ -321,8 +365,15 @@
                 if (allAlbumsBtn) {
                     allAlbumsBtn.textContent = getTranslation('allAlbums', 'allAlbums', 'All Albums');
                 }
-                document.getElementById('lang-en').classList.toggle('active', currentLanguage === 'en');
-                document.getElementById('lang-ru').classList.toggle('active', currentLanguage === 'ru');
+                
+                // Shop Tab
+                document.getElementById('merch-title').textContent = getTranslation('shop', 'title', 'Hand Drawn +-=÷×');
+                document.getElementById('merch-price').textContent = getTranslation('shop', 'price', '30€');
+
+                // Dedication Tab
+                document.getElementById('dedication-content-en').style.display = currentLanguage === 'en' ? 'block' : 'none';
+                document.getElementById('dedication-content-ru').style.display = currentLanguage === 'ru' ? 'block' : 'none';
+
                 populateTable();
             }
 
@@ -336,14 +387,24 @@
                 }
             });
 
-            document.getElementById('lang-en').addEventListener('click', () => { currentLanguage = 'en'; updateUIForLanguage(); });
-            document.getElementById('lang-ru').addEventListener('click', () => { currentLanguage = 'ru'; updateUIForLanguage(); });
+            document.getElementById('lang-en').addEventListener('click', () => { if (currentLanguage !== 'en') { currentLanguage = 'en'; updateUIForLanguage(); } });
+            document.getElementById('lang-ru').addEventListener('click', () => { if (currentLanguage !== 'ru') { currentLanguage = 'ru'; updateUIForLanguage(); } });
             
             const themeToggle = document.getElementById('theme-toggle');
             themeToggle.addEventListener('change', () => {
                 const theme = themeToggle.checked ? 'dark' : 'light';
                 document.body.dataset.theme = theme;
                 localStorage.setItem('theme', theme);
+            });
+            
+            document.getElementById('tab-nav').addEventListener('click', (event) => {
+                if(event.target.matches('.tab-btn')) {
+                    const tabId = event.target.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                    event.target.classList.add('active');
+                    document.getElementById(`${tabId}-view`).classList.add('active');
+                }
             });
 
             // Initial Load
@@ -352,6 +413,7 @@
                 document.body.dataset.theme = savedTheme;
                 themeToggle.checked = savedTheme === 'dark';
             }
+            populateDedicationContent();
             createFilterControls();
             updateUIForLanguage();
         });
